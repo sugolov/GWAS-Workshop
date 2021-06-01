@@ -1,5 +1,5 @@
 # GWAS Workshop
-A repository containing guides, gene expression data, and scripts for a Genome-Wide Association Study workshop for high school students.
+A repository containing guides, gene expression data, and scripts for a Genome-Wide Association Study workshop.
 
 This workshop performs three Genome-Wide Association Studies on endoplasmic reticulum aminopeptidase 2 gene expression data collected by the 
 Illumina microarray of HapMap3 individuals, having significant overlap with 1000 Genomes Project individuals. The association tests are performed with 
