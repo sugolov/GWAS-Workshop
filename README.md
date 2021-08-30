@@ -9,7 +9,7 @@ of statistics and genomics for interested high school students. The workshop foc
 interpret their results. Statistical methods and considerations for genetic data, visualization and interpretation of large amounts of data, 
 population stratification through principal component analysis, and reproducibility research are at the forefront of this workshop.
 
-Please see the workshop manual for a complete bibliography. Below are links to materials referenced in the above paragraph.
+Please see the workshop manual for a complete bibliography. Below are links to materials referenced above.
 
 https://www.internationalgenome.org/category/gene-expression/
 https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-198/
