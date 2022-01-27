@@ -1,0 +1,107 @@
+---
+title: "Reference Alleles for LocusZoom Uploading"
+output: html_notebook
+---
+
+*This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. *
+
+*Try executing this chunk by clicking the Run button within the chunk or by placing your cursor inside it and pressing Ctrl+Shift+Enter.*
+
+### Steps
+
+Below is the code used to specify reference alleles for SNPs within a 500kb 
+window of the desired SNP. After this, the data may be plotted on LocusZoom. 
+
+When using this script, modify the ID of the TOP SNP, the location/name of the data table being read, and the names in the output files including the axis and main titles in the plots. You will need to specify the .bim file for the dataset you are working with, as it contains the desired reference alleles.
+
+Load libraries.
+```{r}
+library(dplyr)
+```
+Specify the name of the top SNP and the .bim file.
+```{r}
+top_snp = "rs10044354"
+bim_file = "LRAP_CEU.bim"
+```
+
+Read the data table containing --linear association results. Write a new data table that omits NA values from the association results.
+```{r}
+results <- read.table("LRAP_CEU_YRI_pca_sex.assoc.linear",
+                      header = TRUE, 
+                      sep = "", 
+                      fill = TRUE, 
+                      quote = "", 
+                      check.names = FALSE)
+NA_removed <- as.data.frame(na.omit(results))
+```
+
+Assign the chromosome and basepair values of the top snp. Take a subset of the 'NA_removed' dataframe where the chromosome column matches the chromosome of the top SNP, and the base pair positions are within 500,000 BP of the top SNP.
+```{r}
+chr_top_snp = NA_removed[NA_removed$SNP == top_snp,1]
+bp_top_snp = NA_removed[NA_removed$SNP == top_snp,3]
+
+window = subset(NA_removed, 
+                CHR==chr_top_snp 
+                & BP >= bp_top_snp - 500000 
+                & BP <= bp_top_snp + 500000)
+```
+
+
+Create a new NA column in the dataframe to add reference alleles. Read the .bim file for the analysis, and create respective column titles, take a subset in the same way as the NA_removed dataframe.
+```{r}
+window[,"A2"] <- NA
+
+bim = read.table(bim_file,  
+                 header = FALSE, 
+                 sep = "", 
+                 fill = TRUE, 
+                 quote = "", 
+                 check.names = FALSE)
+
+colnames(bim) <- c("CHR", "SNP", "MORG", "BP", "A1", "A2")
+
+bim_subset = subset(bim, 
+                      CHR==chr_top_snp 
+                      & BP >= bp_top_snp - 500000 
+                      & BP <= bp_top_snp + 500000)
+```
+
+Iterate through the .bim file and add A2 to main dataframe
+```{r}
+for(i in 1:nrow(window)){
+     window$A2[i] <- bim_subset[bim_subset$SNP == window[i,2],6]
+}
+```
+
+
+Writes the window table with specified reference alleles to a .txt file.
+The paste command concatenates the first string with the top_snp argument
+specified earlier. Afterwards, return reference window and SNP information to console.
+
+```{r}
+write.table(window, 
+            paste("LocusZoom_data_", top_snp, ".txt"), 
+            append=FALSE, 
+            sep='\t',
+            row.names=FALSE, 
+            col.names=TRUE, 
+            quote=FALSE)
+
+print(writeLines(paste(top_snp, "\n",
+            "BP position: ", bp_top_snp, "\n", 
+            "WINDOW LOWER BOUND: ", bp_top_snp - 500000, "\n",
+            "WINDOW LOWER BOUND: ", bp_top_snp + 500000)))
+
+```
+
+
+
+
+
+### Default R Notebook Instructions
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
