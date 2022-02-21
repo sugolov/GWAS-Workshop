@@ -1,0 +1,199 @@
+---
+title: "Workshop Data Preparation"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+
+## Overview
+
+For the purposes of a GWAS workshop, a phenotypic trait with strong association that could be taken from freely available was chosen. It was determined by Cheung et al. that the ERAP2 (formerly LRAP) gene expression had strong association among 1000 Genomes individuals. Individuals from the HapMap3 project, overlapping significantly with 1KG individuals, have freely available gene expression data. In addition, quality control was performed on the 1KG individuals by TCAG. The individuals and genetic markers that pass quality control are paired with their ERAP2 phenotype in the gene expression data. Gene expression was recorded on Illumina Human-6 v2 Expression BeadChip, in which an annotation file for probes corresponding to gene names is used to match readings. 
+
+
+#### HapMap3 Individuals' Gene Expression Data
+
+https://www.internationalgenome.org/category/gene-expression/
+
+Download:
+
+https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-198/
+
+https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-264/
+
+
+#### TCAG - 1000 Genomes Quality Control
+
+http://www.tcag.ca/tools/1000genomes.html
+
+
+#### Illumina Human-6 v2 Probe Annotation
+
+https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GPL6102
+
+Download:
+
+https://www.ncbi.nlm.nih.gov/geo/download/?acc=GPL6102&format=file&file=GPL6102%5FIllumina%5FHumanWG%2D6%5FV2%5F0%5FR1%5F11223189%5FA%2Ebgx%2Egz
+
+
+## Matching Phenotypes
+
+A command line script `kg_expression.R` for creating these datasets is provided in the `Scripts` directory. Specify
+
+```
+Rscript --vanilla kg_expression.R <gene> <b/c>
+```
+
+where `<gene>` is the gene name (eg. `LRAP` or `CPNE1`) and `<b/c>` is the desired output format (eg. `b` - binary, `c` - continuous).
+
+#### Directory structure
+```
+.
+├── exp_tables
+│   ├── CEU_p3_expression.txt
+│   ├── CHB_p3_expression.txt
+│   ├── GIH_p3_expression.txt
+│   ├── JPT_p3_expression.txt
+│   ├── LWK_p3_expression.txt
+│   ├── MEX_p3_expression.txt
+│   ├── MKK_p3_expression.txt
+│   └── YRI_p3_expression.txt
+├── GPL6102_Illumina_HumanWG-6_V2_0_R1_11223189_A.bgx
+├── DatasetPreparation.Rmd
+└── sampleTable.txt
+```
+`sampleTable.txt` is a reference file for IDs of individuals passing quality control from TCAG: http://www.tcag.ca/documents/tools/sampleTable.txt
+
+#### Creating phenotypes for YRI individuals
+
+Add 1KG population codes to `subpop` vector: in this case it is only `YRI`. Adding multiple codes will extract gene expression data from all individuals in the specified population groups. 
+
+Set gene (`LRAP`) and output form (`c` - continuous). Create strings for file name and title creation.
+
+```{r message=FALSE}
+subpop = c("YRI")
+gene = "LRAP"
+form = "c"
+subpop_string_file = ""
+subpop_string_title = ""
+
+for(s in subpop) {
+  subpop_string_file = paste(subpop_string_file, s, sep="_")
+  subpop_string_title = paste(subpop_string_title, s, sep=" ")
+}
+```
+Load the Illumina annotation array and the IDs of individuals with cleaned data. Set the probe as the Illumina probe matching the gene name. If there is no such gene in the dataset, the script will give an error.
+
+```{r message=FALSE}
+clean = read.table("sampleTable.txt", 
+                   header = TRUE, 
+                   sep = '\t', 
+                   fill = TRUE, 
+                   quote = "")
+
+illumina = read.table("GPL6102_Illumina_HumanWG-6_V2_0_R1_11223189_A.bgx",  
+                      header = TRUE, 
+                      sep = '\t', 
+                      fill = TRUE, 
+                      quote = "")
+
+probe = illumina[illumina$Symbol == gene,]$Probe_Id
+```
+Read the expression table corresponding to each population. Take the transpose of the table so that the row names are the IIDs with the readings on the Illumina probe in the column. Aggregate all readings for IIDs from all subpopulations into the dataframe `phenos`.
+```{r}
+for (p in subpop) {
+  tab = read.table(paste("exp_tables/", p, "_p3_expression.txt", sep=""),
+                   header = TRUE, 
+                   sep = '\t', 
+                   fill = TRUE, 
+                   quote = "")
+  
+  row.names(tab) <- tab$Normalization.REF
+  s <- data.frame(t(tab)[,probe])
+  colnames(s) = probe
+  
+  if(p == subpop[1]){
+    phenos <- s
+  }
+  else {
+    phenos <- rbind(phenos, s)
+  }
+}
+```
+
+Create a dataframe with all 1KG individuals having a FID, IID, and phenotype columns. If the individual appears in `phenos` above, set their `PHEN` as the corresponding phenotype. Otherwise set it as `-9`, which is the PLINK missing phenotype indicator.
+
+```{r}
+FID <- clean$Ped
+IID <- clean$ID
+PHEN <- c()
+
+for(id in IID) {
+  if(id %in% rownames(phenos)) {
+    PHEN <- c(PHEN, phenos[id, probe])
+  } else {
+    PHEN <- c(PHEN, -9)
+  }
+}
+
+temp = cbind(FID, IID, PHEN)
+names(temp) = c("FID", "IID", "PHEN")
+out = as.data.frame(temp)
+```
+
+The phenotypes can now be written and used for an analysis.
+
+```{r}
+write.table(out, 
+            paste(gene, 
+                  "_phenos_plink_format_", 
+                  subpop_string_file, 
+                  "_", 
+                  form, 
+                  ".txt", 
+                  sep = ""), 
+            append=FALSE, 
+            sep='\t', 
+            dec=".", 
+            row.names=FALSE, 
+            col.names=FALSE, 
+            quote=FALSE)
+```
+
+### Summary Statistics
+We generate a histogram and a quick summary of phenotype readings.
+
+```{r}
+true_pheno = c()
+for(p in as.numeric(out$PHEN)) {
+  if(p>-9){
+    true_pheno = c(true_pheno, p)
+  }
+}
+
+summary(true_pheno)
+
+hist(true_pheno,  
+     main=paste(gene, 
+               " Expression Histogram", 
+               subpop_string_title, 
+               sep = ""),
+     xlab="Gene Expression",
+     ylab="Frequency",
+     xlim=c(6,15),
+     breaks=seq(6,15,0.5),
+     freq = TRUE)
+```
+
+
+
+
+
+
+
+### Default R Instructions
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
