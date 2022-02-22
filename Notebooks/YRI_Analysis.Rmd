@@ -1,0 +1,112 @@
+---
+title: "Linear Association Analysis with the Yoruban population from Ibadan, Nigeria"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+*This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code.*
+
+*Try executing this chunk by clicking the Run button within the chunk or by placing your cursor inside it and pressing Ctrl+Shift+Enter.* 
+
+###Regression with Plink
+
+The first analysis we will demonstrate is a simple linear association analysis. Create a phenotype file using [Github.com/sugolov/GWASWorkshop/tree/master/Notebooks/DatasetPreparation.Rmd](https://github.com/sugolov/GWAS-Workshop/tree/master/Notebooks). Download the "Plink binary format files of independent samples" from <http://www.tcag.ca/tools/1000genomes.html>. When extracted, this should have three files: indep.bed, indep.bim and indep.fam. Create a directory with the three indep files and the phenotype .txt file, and set that as your working directory in Rstudio. To input the phenotype file, run the following command:
+
+```{bash}
+plink --bfile indep --pheno ERAP2_YRI_phenotypes.txt --prune --make-bed --out ERAP2_YRI
+```
+
+To perform the linear regression analysis, we will include 2 options for the "---linear" flag and 1 additional flag:
+
+1.  "sex" - this option sets sex as a covariate, which we have chosen to do in case the sex has any effect on our phenotype.
+
+2.  "hide-covar" - As Plink's default behaviour is to output the regression results of the covariates with the phenotype, this option hides all those results (for our analysis, just the sex covariate) as we are not interested in their statistical significance.
+
+3.  "---chr 1-22" - this flag selects only SNPs from chromosome 1-22 for the analysis, as sex chromosomes are more difficult to analyze due to length differences between the X and Y chromosome.
+
+```{bash}
+plink --bfile ERAP2_YRI --linear sex hide-covar --chr 1-22 --out ERAP2_YRI_sex
+```
+
+###Data Processing
+
+After this analysis, proceed to removing the NA values.
+
+```{r}
+results <- read.table("ERAP2_YRI_sex.assoc.linear",  
+                      header = TRUE, 
+                      sep = "", 
+                      fill = TRUE, 
+                      quote = "", 
+                      check.names = FALSE)
+
+NA_removed <- as.data.frame( na.omit(results))
+
+write.table(NA_removed, 
+            "GWAS_results_na_removed.assoc.linear", 
+            append=FALSE, 
+            sep='\t', 
+            row.names=FALSE, 
+            col.names=TRUE, 
+            quote=FALSE)
+```
+
+Sort the rows of the NA_removed data table by increasing p-value. Get rows corresponding to the SNPs with the lowest p-value.
+
+```{r}
+sorted <- NA_removed[order(NA_removed$"P"),]
+
+top50 <- sorted[1:50,]
+
+write.table(NA_removed, 
+            "GWAS_results_top50_SNPs.assoc.linear", 
+            append=FALSE, 
+            sep='\t', 
+            row.names=FALSE, 
+            col.names=TRUE, 
+            quote=FALSE)
+```
+
+
+###Plotting
+
+Now we will move on to visualizing the results.
+
+```{r}
+library("qqman")
+```
+
+Generate a histogram.
+
+```{r}
+hist(as.numeric(NA_removed$P), 
+     main="p-value distribution",
+     xlab="p-Values",
+     ylab="Frequency",
+     breaks = seq(0,1,0.05),
+     freq = TRUE, 
+     cex = 3
+     )
+```
+
+Generate a Manhattan Plot
+
+```{r}
+manhattan(NA_removed, 
+          chr="CHR",
+          bp="BP",
+          p="P",
+          snp="SNP", 
+          main = "Manhattan plot"
+          )
+```
+
+Generate a QQ-plot.
+
+```{r}
+qq(NA_removed$P, 
+   main = "Q-Q plot"
+   )
+```
+
+Congratulations on completing your first analysis!

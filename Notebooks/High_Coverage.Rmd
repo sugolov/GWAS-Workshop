@@ -1,0 +1,35 @@
+---
+title: "ERAP2 High Coverage Dataset Generation"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+Using your FTP client, set the host name to "ftp.1000genomes.ebi.ac.uk" and download the following files:
+
+-   ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/\
+    20201028_3202_raw_GT_with_annot/20201028_CCDG_14151_B01_GRM_WGS_2020-08-05\
+    \_chr5.recalibrated_variants.vcf.gz
+
+-   ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/\
+    20130606_g1k_3202_samples_ped_population.txt
+
+Set your working directory to the directory which contains both of the files. Then, create a file to use with the --update-ids flag, as VCF files only store the Sample ID. See Plink documentation for the --update-ids flag.
+
+`{bash}`
+
+`tail -n +2 <(paste <(awk '{print"0",$2}' 20130606_g1k_3202_samples_ped_population.txt) <(awk '{print$1,$2}' 20130606_g1k_3202_samples_ped_population.txt)) > Updated_IDs.txt}`
+
+In the above file, the first column is all zeros, so the --const-fid 0 flag is used to set all Family IDs (FIDs) to 0 when taking in the VCF file. We will also use the --snps-only to only accept SNP variation, and the --set-missing-var-ids to rename variants that have not been assigned standard IDs.
+
+`{bash}`
+
+`plink --vcf 20201028_CCDG_14151_B01_GRM_WGS_2020-08-05_chr5.recalibrated_variants.vcf.gz --const-fid 0 --update-ids Updated_IDs.txt --allow-no-sex --snps-only --set-missing-var-ids @:\#\[b38\] --make-bed --out HC_all_samples_nosex}`
+
+Lastly, update the sex of the samples, input the phenotypes, and remove all individuals with no phenotype. For this step, you will need the desired phenotype .txt file. The example provided below inputs individuals from the CEU and YRI populations with their Endoplasmic Reticulum Aminopeptidase 2 expression.
+
+`{bash}`
+
+`plink --bfile HC_allsamples_nosex --update-sex 20130606_g1k_3202_samples_ped_population.txt 3 --pheno ERAP2_CEU_YRI_phenotypes.txt --prune --make-bed --out ERAP2_CEU_YRI_HC}`
+
+Now you have a dataset with the correct Family IDs, Individual IDs, sex, phenotypes, and populations.
