@@ -26,6 +26,7 @@ In the above file, the first column is all zeros, so the --const-fid 0 flag is u
 ```
 
 Lastly, update the sex of the samples, input the phenotypes, and remove all individuals with no phenotype. For this step, you will need the desired phenotype .txt file.
+The example provided below inputs individuals from the CEU and YRI populations with their Endoplasmic Reticulum Aminopeptidase 2 expression.
 
 ```{bash} plink --bfile HC_allsamples_nosex --update-sex 20130606_g1k_3202_samples_ped_population.txt 3 --pheno ERAP2_CEU_YRI_phenotypes.txt --prune --make-bed --out ERAP2_CEU_YRI_HC}
 ```
