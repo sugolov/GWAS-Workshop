@@ -14,7 +14,8 @@ Using your FTP client, set the host name to "ftp.1000genomes.ebi.ac.uk" and down
 -   ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/\
     20130606_g1k_3202_samples_ped_population.txt
 
-First, create a file to use with the --update-ids flag, as VCF files only store the Sample ID. See Plink documentation for the --update-ids flag.
+Set your working directory to the directory which contains both of the files.
+Then, create a file to use with the --update-ids flag, as VCF files only store the Sample ID. See Plink documentation for the --update-ids flag.
 
 ```{bash} tail -n +2 <(paste <(awk '{print"0",$2}' 20130606_g1k_3202_samples_ped_population.txt) <(awk '{print$1,$2}' 20130606_g1k_3202_samples_ped_population.txt)) > Updated_IDs.txt}
 ```
@@ -28,3 +29,4 @@ Lastly, update the sex of the samples, input the phenotypes, and remove all indi
 
 ```{bash} plink --bfile HC_allsamples_nosex --update-sex 20130606_g1k_3202_samples_ped_population.txt 3 --pheno ERAP2_CEU_YRI_phenotypes.txt --prune --make-bed --out ERAP2_CEU_YRI_HC}
 ```
+Now you have a dataset with the correct Family IDs, Individual IDs, sex, phenotypes, and populations. 
