@@ -10,7 +10,7 @@ output:
 
 ###Regression with Plink
 
-The first analysis we will demonstrate is how to do a simple linear association analysis. You will need a copy of the cleaned 1000 Genomes data from The Centre for Applied Genomics and the phenotype file that you obtained from [Github.com/sugolov/GWASWorkshop/tree/master/Notebooks/DatasetPreparation.Rmd](https://github.com/sugolov/GWAS-Workshop/tree/master/Notebooks). Download the "Plink binary format files of independent samples" from <http://www.tcag.ca/tools/1000genomes.html>. When extracted, this should have three files: indep.bed, indep.bim and indep.fam. Create a directory with the three indep files and the desired phenotype .txt file, and set that as your working directory in Rstudio. To input the phenotype file, run the following command:
+The first analysis we will demonstrate is how to do a simple linear association analysis. Create a phenotype file using [Github.com/sugolov/GWASWorkshop/tree/master/Notebooks/DatasetPreparation.Rmd](https://github.com/sugolov/GWAS-Workshop/tree/master/Notebooks). Download the "Plink binary format files of independent samples" from <http://www.tcag.ca/tools/1000genomes.html>. When extracted, this should have three files: indep.bed, indep.bim and indep.fam. Create a directory with the three indep files and the phenotype .txt file, and set that as your working directory in Rstudio. To input the phenotype file, run the following command:
 
 ```{bash}
 plink --bfile indep --pheno ERAP2_YRI_phenotypes.txt --prune --make-bed --out ERAP2_YRI
