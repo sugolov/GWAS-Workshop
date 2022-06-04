@@ -3,12 +3,14 @@ title: "Linear Association Analysis with the Yoruban population from Ibadan, Nig
 output:
   html_notebook: default
   pdf_document: default
+  html_document:
+    df_print: paged
 ---
 *This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code.*
 
 *Try executing this chunk by clicking the Run button within the chunk or by placing your cursor inside it and pressing Ctrl+Shift+Enter.* 
 
-###Regression with Plink
+### Regression with Plink
 
 The first analysis we will demonstrate is a simple linear association analysis. Create a phenotype file using [Github.com/sugolov/GWASWorkshop/tree/master/Notebooks/DatasetPreparation.Rmd](https://github.com/sugolov/GWAS-Workshop/tree/master/Notebooks). Download the "Plink binary format files of independent samples" from <http://www.tcag.ca/tools/1000genomes.html>. When extracted, this should have three files: indep.bed, indep.bim and indep.fam. Create a directory with the three indep files and the phenotype .txt file, and set that as your working directory in Rstudio. To input the phenotype file, run the following command:
 
@@ -28,7 +30,7 @@ To perform the linear regression analysis, we will include 2 options for the "--
 plink --bfile ERAP2_YRI --linear sex hide-covar --chr 1-22 --out ERAP2_YRI_sex
 ```
 
-###Data Processing
+### Data Processing
 
 After this analysis, proceed to removing the NA values.
 
@@ -68,7 +70,7 @@ write.table(NA_removed,
 ```
 
 
-###Plotting
+### Plotting
 
 Now we will move on to visualizing the results.
 
