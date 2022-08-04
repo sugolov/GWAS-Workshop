@@ -26,12 +26,14 @@ data <- read.table(
 
 ### Histogram ###
 
-#specifies output as 750p x 750p .jpeg, 
+#specifies output as a 5in x 5in .jpeg with a resolution of 600 dots per inch, 
 #   first parameter is the name of the file
 
 jpeg("ERAP2_sample_Histogram.jpeg", 
-     width = 750, 
-     height = 750)
+     width = 5, 
+     height  = 5,
+     units = "in",
+     res = 600)
 
 #generates the histogram
 #
@@ -59,12 +61,14 @@ dev.off()
 
 ### Manhattan Plot ###
 
-#specifies output as 750p x 750p .jpeg, 
+#specifies output as 5in x 5in .jpeg with a resolution of 600 dots per inch, 
 #   first parameter is the title
 
 jpeg("ERAP2_sample_Manhattan.jpeg", 
-     width=750, 
-     height = 500)
+     width = 5, 
+     height  = 5,
+     units = "in",
+     res = 600)
 
 
 #generates the Manhattan plot
@@ -93,14 +97,15 @@ dev.off()
 
 ### QQ-Plot ###
 
-#specifies output as 750p x 750p .jpeg, 
+#specifies output as 5in x 5in .jpeg with a resolution of 600 dots per inch, 
 #   first parameter is the title
 jpeg("ERAP2_sample_QQ.jpeg", 
-     width=750, 
-     height = 750
-     )
+     width = 5, 
+     height = 5,
+     units = "in",
+     res = 600)
 
-#generates the Manhattan plot
+#generates the QQ plot
 #
 #   data$P      - p-values being plotted
 #   main=       - the main title
