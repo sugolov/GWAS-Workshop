@@ -113,7 +113,7 @@ jpeg("ERAP2_sample_QQ.jpeg",
 #   https://www.rdocumentation.org/packages/qqman/versions/0.1.2
 
 qq(data$P, 
-   main = "Q-Q plot"
+   main = "QQ-Plot"
    )
 
 #saves the output .jpeg in the current directory
