@@ -45,7 +45,7 @@ top50 <- sorted[1:50,]
 #
 #   https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/write.table
 
-write.table(NA_removed, 
+write.table(top50, 
             "GWAS_results_top50_SNPs.assoc.linear", 
             append=FALSE, 
             sep='\t', 
