@@ -18,7 +18,7 @@ library("qqman")
 #   https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table
 
 data <- read.table(
-  "LRAP_CEU_YRI_bin_sex_test_clean.assoc.linear",
+  "ERAP2_CEU_YRI_bin_sex_test_clean.assoc.linear",
   header=TRUE,  
   sep = "", 
   fill = TRUE, 

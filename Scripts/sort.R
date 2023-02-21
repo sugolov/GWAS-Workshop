@@ -15,7 +15,7 @@
 #
 #   https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table
 
-results <- read.table("LRAP_CEU_pca_sex_test.assoc.linear",  
+results <- read.table("ERAP2_CEU_pca_sex_test.assoc.linear",  
                       header = TRUE, 
                       sep = "", 
                       fill = TRUE, 

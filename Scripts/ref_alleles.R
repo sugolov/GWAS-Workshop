@@ -30,7 +30,7 @@ library(dplyr)
 top_snp = "rs10044354"
 
 #change to the name of the .bim file corresponding to your dataset
-bim_file = "LRAP_CEU.bim"
+bim_file = "ERAP2_CEU.bim"
 
 ###############################################################################
 
@@ -42,7 +42,7 @@ bim_file = "LRAP_CEU.bim"
 #
 #   https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table
 
-results <- read.table("LRAP_CEU_YRI_pca_sex.assoc.linear",
+results <- read.table("ERAP2_CEU_YRI_pca_sex.assoc.linear",
                       header = TRUE, 
                       sep = "", 
                       fill = TRUE, 

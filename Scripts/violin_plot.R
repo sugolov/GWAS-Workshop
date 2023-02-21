@@ -10,7 +10,7 @@ library(ggplot2)
 #
 #   https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table
 
-data = read.table("LRAP_CEU_top_alleles.ped",
+data = read.table("ERAP2_CEU_top_alleles.ped",
                   header = FALSE, 
                   sep = "", 
                   fill = TRUE, 
