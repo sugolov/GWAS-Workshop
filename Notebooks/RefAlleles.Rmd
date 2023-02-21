@@ -21,12 +21,12 @@ library(dplyr)
 Specify the name of the top SNP and the .bim file.
 ```{r}
 top_snp = "rs10044354"
-bim_file = "LRAP_CEU.bim"
+bim_file = "ERAP2_CEU.bim"
 ```
 
 Read the data table containing --linear association results. Write a new data table that omits NA values from the association results.
 ```{r}
-results <- read.table("LRAP_CEU_YRI_pca_sex.assoc.linear",
+results <- read.table("ERAP2_CEU_YRI_pca_sex.assoc.linear",
                       header = TRUE, 
                       sep = "", 
                       fill = TRUE, 
