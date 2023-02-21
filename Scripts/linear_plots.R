@@ -10,6 +10,7 @@
 library("qqman")
 
 #read the data table with the --linear association results
+#input the NA_removed.assoc.linear file of the desired analysis
 #   header=TRUE - reads the top row as names for the columns
 #   sep = ""    - reads the any length whitespace between text as separator
 #   fill = TRUE - matches row length with NA values where applicable
