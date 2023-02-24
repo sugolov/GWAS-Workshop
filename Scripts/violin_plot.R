@@ -2,7 +2,7 @@
 library(ggplot2)
 
 
-#read the data table with the --linear association results
+#read the data table with the linear regression results
 #   header=FALSE - does not read the top row as names for the columns
 #   sep = ""    - reads the any length whitespace between text as separator
 #   fill = TRUE - matches row length with NA values where applicable
@@ -10,7 +10,7 @@ library(ggplot2)
 #
 #   https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table
 
-data = read.table("LRAP_CEU_top_alleles.ped",
+data = read.table("ERAP2_CEU_top_alleles.ped",
                   header = FALSE, 
                   sep = "", 
                   fill = TRUE, 

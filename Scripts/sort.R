@@ -7,15 +7,18 @@
 #     - the names of the output files
 #------------------------------------------------------------------------------#
 
-#read the data table with the --linear association results
+#read the data table with the linear regression results
+#for plink v1.90, input the .assoc.linear file of the desired analysis
+#for plink v2.0, input the .glm.linear file of the desired analysis
 #   header=TRUE - reads the top row as names for the columns
 #   sep = ""    - reads the any length whitespace between text as separator
 #   fill = TRUE - matches row length with NA values where applicable
 #   quote = ""  - indicates no data is quoted
 #
 #   https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table
+#   Code shown for Plink v1.90
 
-results <- read.table("LRAP_CEU_pca_sex_test.assoc.linear",  
+results <- read.table("ERAP2_CEU_pca_sex_test.assoc.linear",  
                       header = TRUE, 
                       sep = "", 
                       fill = TRUE, 

@@ -44,6 +44,7 @@ Rscript --vanilla kg_expression.R <gene> <b/c>
 ```
 
 where `<gene>` is the gene name (eg. `LRAP` or `CPNE1`) and `<b/c>` is the desired output format (eg. `b` - binary, `c` - continuous).
+Note that at the time when this data was generated, ERAP2 was still referred to as LRAP so the flag used to create the datasets for the manual was `LRAP`.
 
 #### Directory structure
 ```

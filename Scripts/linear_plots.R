@@ -4,21 +4,25 @@
 #     - the location/name of the data table being read
 #     - the names of the output image files
 #     - the axis and main titles in the plots
+#     - the names of the columns of the input tables, as Plink v1.90 and Plink v2.0 sometimes use different column names
 
 
 #load the library needed for qq, manhattan plots
 library("qqman")
 
 #read the data table with the --linear association results
+#for plink v1.90, input the NA_removed.assoc.linear file of the desired analysis
+#for plink v2.0, input the NA_removed.glm.linear file of the desired analysis
 #   header=TRUE - reads the top row as names for the columns
 #   sep = ""    - reads the any length whitespace between text as separator
 #   fill = TRUE - matches row length with NA values where applicable
 #   quote = ""  - indicates no data is quoted
 #
 #   https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table
+#   Code shown for Plink v1.90
 
 data <- read.table(
-  "LRAP_CEU_YRI_bin_sex_test_clean.assoc.linear",
+  "ERAP2_CEU_YRI_bin_sex_test_clean.assoc.linear",
   header=TRUE,  
   sep = "", 
   fill = TRUE, 
@@ -37,8 +41,7 @@ jpeg("ERAP2_sample_Histogram.jpeg",
 
 #generates the histogram
 #
-#   as.numeric(data$P)    - the data being plotted, numeric type of P-value
-#                           column in the data table
+#   as.numeric(data$P)    - the data being plotted, numeric type of P-value column in the data table
 #   main =                - the main title
 #   xlab =                - the x axis title
 #   ylab =                - the y axis title
@@ -71,8 +74,8 @@ jpeg("ERAP2_sample_Manhattan.jpeg",
      res = 600)
 
 
-#generates the Manhattan plot
-#
+#generates the Manhattan plot 
+#For Plink v1.90
 #   data        - the data frame data is being taken from
 #   chr="CHR"   - name of column with chromosome number
 #   bp="BP"     - name of column with base pair position of SNPs
@@ -80,9 +83,16 @@ jpeg("ERAP2_sample_Manhattan.jpeg",
 #   snp="SNP"   - name of column with SNP id
 #   main=       - the main title
 #
+#For Plink v2.0
+#   data        - the data frame data is being taken from
+#   chr="CHROM"   - name of column with chromosome number
+#   bp="POS"     - name of column with base pair position of SNPs
+#   p="P"       - name of column with p-values of SNPs
+#   snp="ID"   - name of column with SNP id
+#   main=       - the main title
+#
 #   https://www.rdocumentation.org/packages/qqman/versions/0.1.2
-
-
+#   Code shown for Plink v1.90
 
 manhattan(data, 
           chr="CHR",
