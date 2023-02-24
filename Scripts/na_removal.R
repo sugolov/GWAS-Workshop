@@ -2,17 +2,20 @@
 # Below is the script used to remove NA values from the GWAS results
 #
 # When using this script, modify:
-#     - the location/name of the data table being read
+#     - the location/name of the input file being read
 #     - the names of the output files
 #------------------------------------------------------------------------------#
 
-#read the data table with the --linear association results
+#read the data table with the linear regression results
+#for plink v1.90, input the .assoc.linear file of the desired analysis
+#for plink v2.0, input the .glm.linear file of the desired analysis
 #   header=TRUE - reads the top row as names for the columns
 #   sep = ""    - reads the any length whitespace between text as separator
 #   fill = TRUE - matches row length with NA values where applicable
 #   quote = ""  - indicates no data is quoted
 #
 #   https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table
+#   Code shown for Plink v1.90
 
 results <- read.table("ERAP2_CEU_pca_sex_test.assoc.linear",  
                       header = TRUE, 

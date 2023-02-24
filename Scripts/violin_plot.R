@@ -2,7 +2,7 @@
 library(ggplot2)
 
 
-#read the data table with the --linear association results
+#read the data table with the linear regression results
 #   header=FALSE - does not read the top row as names for the columns
 #   sep = ""    - reads the any length whitespace between text as separator
 #   fill = TRUE - matches row length with NA values where applicable
