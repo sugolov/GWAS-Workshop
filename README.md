@@ -6,10 +6,11 @@ Throughout the 4.5-day workshop, the mornings were used for lectures, providing 
 ## Data download 
 
 To download all files, use `Code > Download ZIP` or command line `git clone https://github.com/sugolov/GWAS-Workshop.git`. 
-`GWAS_Manual.pdf` contains instructions for conducting the workshop. For downloading SNP data, please see The Center for Applied Genomics `http://www.tcag.ca/tools/1000genomes.html`, download below:
+`GWAS_Manual.pdf` contains instructions for conducting the workshop. Gene expression data can be found in the `Datasets` directory. For downloading SNP data, please see The Center for Applied Genomics `http://www.tcag.ca/tools/1000genomes.html`, download below:
 
 - `http://www.tcag.ca/documents/tools/omni25_indep.tar.gz`: cleaned, independent samples from 1000 Genomes project
 
+## Directory details
 
 ### Datasets
 
