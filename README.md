@@ -5,11 +5,16 @@ Throughout the 4.5-day workshop, the mornings were used for lectures, providing 
 
 ## Data download 
 
-Use `Code > Download ZIP` or command line `git clone https://github.com/sugolov/GWAS-Workshop.git`. 
-`GWAS_Manual.pdf` contains instructions for the workshop.
+To download all files, use `Code > Download ZIP` or command line `git clone https://github.com/sugolov/GWAS-Workshop.git`. 
+`GWAS_Manual.pdf` contains instructions for conducting the workshop. For downloading genetic data used in the workshop, please see The Center for Applied Genomics `http://www.tcag.ca/tools/1000genomes.html`.
+
+- `http://www.tcag.ca/documents/tools/omni25_indep.tar.gz`: cleaned, independent samples from 1000 Genomes project
 
 
 ### Datasets
+
+Directory containing gene expression data for selected 1000 Genomes populations.
+
 - `Datasets/ERAP2_YRI_phenotypes.txt`: YRI dataset required for tutorial.
 - `Datasets/ERAP2_CEU_phenotypes.txt`: CEU dataset for independent analysis.
 - `Datasets/ERAP2_CEU_YRI_phenotypes.txt`: YRI and CEU dataset for mixed population analysis.
@@ -21,7 +26,6 @@ Contains all scripts mentioned throughout the manual.
 ### Notebooks
 
 Guided walkthrough of the scripts.
-
 
 
 ## Provided workshop materials
